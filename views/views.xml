@@ -1,0 +1,619 @@
+<odoo>
+  <data>
+    <!-- wizard -->
+    <record model="ir.ui.view" id="empires_of_legends.player_wizard_form">
+      <field name="name">empires_of_legends player wizard</field>
+      <field name="model">empires_of_legends.player_wizard</field>
+      <field name="arch" type="xml">
+        <form>
+          <group>
+            <field name="avatar" widget="image"  class="oe_avatar"/>
+            <field name="name"/>
+            <field name="password" password="True"/>
+        </group>
+        <footer>
+          <button name="create_player" type="object"
+                  string="Create" class="oe_highlight"/>
+          <button special="cancel" string="Cancel"/>
+      </footer>
+        </form>
+      </field>
+    </record>
+    <!-- vistes tree -->
+
+    <record model="ir.ui.view" id="empires_of_legends.player_tree">
+      <field name="name">Empires Of Legends player list</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="password" />
+          <field name="villages" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.village_tree">
+      <field name="name">Empires Of Legends villages list</field>
+      <field name="model">empires_of_legends.village</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="food" />
+          <field name="wood" />
+          <field name="stone" />
+          <field name="iron" />
+          <field name="gold" />
+          <field name="troops_qty" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.territory_tree">
+      <field name="name">Empires Of Legends territories list</field>
+      <field name="model">empires_of_legends.territory</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.building_tree">
+      <field name="name">Empires Of Legends buildings list</field>
+      <field name="model">empires_of_legends.building</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="type" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.building_type_tree">
+      <field name="name">Empires Of Legends building types list</field>
+      <field name="model">empires_of_legends.building_type</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+        </tree>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.troop_tree">
+      <field name="name">Empires Of Legends troops list</field>
+      <field name="model">empires_of_legends.troop</field>
+      <field name="arch" type="xml">
+        <tree>
+          <field name="name" />
+          <field name="hp" />
+          <field name="armor" />
+          <field name="damage" />
+          <field name="time" />
+          <field name="speed" />
+        </tree>
+      </field>
+    </record>
+
+    <!-- vistes form -->
+    <record model="ir.ui.view" id="empires_of_legends.player_partner_form">
+      <field name="name">Player list</field>
+      <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+      <field name="arch" type="xml">
+
+        <notebook colspan="4" position="inside">
+          <page string="Empires of Legends">
+            <group>
+              <field name="avatar" widget="image" />
+              <field name="password" />
+              <field name="is_player" />
+              <field name="villages" />
+            </group>
+          </page>
+        </notebook>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.player_form">
+      <field name="name">Player list</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="avatar" widget="image" />
+              <field name="password" />
+              <field name="is_player" />
+              <field name="villages" />
+              <button name="%(empires_of_legends.player_wizard_action)d"
+                    type="action" string="Crear Player" class="oe_highlight" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.village_form">
+      <field name="name">Village list</field>
+      <field name="model">empires_of_legends.village</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name" />
+                <field name="civilization" />
+                <field name="player" />
+                <field name="territory" />
+              </group>
+              <group>
+                <field name="food" />
+                <field name="wood" />
+                <field name="stone" />
+                <field name="iron" />
+                <field name="gold" />
+              </group>
+              <group>
+                <field name="infantry_qty" />
+                <field name="archery_qty" />
+                <field name="cavalry_qty" />
+                <field name="siege_qty" />
+                <field name="troops_qty" />
+              </group>
+              <field name="buildings" />
+              <group>
+                <field name="troops" mode="tree">
+                  <tree>
+                    <field name="name" />
+                    <field name="qty" />
+                    <field name="trains_queue" />
+                    <field name="trains_progress" widget="progressbar" />
+                  </tree>
+
+                </field>
+                <field name="available_troops" mode="kanban">
+                  <kanban>
+                    <field name="id" />
+                    <field name="image" />
+                    <field name="name" />
+                    <field name="armor" />
+                    <field name="damage" />
+
+                    <templates>
+                      <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
+                          <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block"
+                            t-attf-style="background-image:url('#{kanban_image('empires_of_legends.troop',
+                     'image', record.id.value, placeholder)}')"></div>
+
+                          <div class="oe_kanban_details d-flex flex-column">
+                            <a type="open">
+                              <h4 class="o_kanban_record_title oe_partner_heading">
+                                <field name="name" />
+                              </h4>
+                            </a>
+                            <ul>
+                              <li>
+                                Armor:
+                                <field name="armor" />
+                              </li>
+                              <li>
+                                Damage:
+                                <field name="damage" />
+                              </li>
+                            </ul>
+                          </div>
+                          <div class="oe_kanban_details d-flex flex-column">
+                            <button name="train"
+                              type="object"
+                              string="Train"
+                              class="btn btn-primary"
+                              context="{'ctx_village':parent.id}"
+                            >Train</button>
+                          </div>
+                        </div>
+                      </t>
+                    </templates>
+                  </kanban>
+                </field>
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.territory_form">
+      <field name="name">Territory list</field>
+      <field name="model">empires_of_legends.territory</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="villages" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.building_form">
+      <field name="name">Building list</field>
+      <field name="model">empires_of_legends.building</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name" />
+                <field name="avatar" widget="image" />
+                <field name="type" />
+                <field name="village" />
+              </group>
+              <group>
+                <field name="produce_food" attrs="{'invisible': [('produce_food','=',0)]}" />
+                <field name="produce_wood" attrs="{'invisible': [('produce_wood','=',0)]}" />
+                <field name="produce_stone" attrs="{'invisible': [('produce_stone','=',0)]}" />
+                <field name="produce_iron" attrs="{'invisible': [('produce_iron','=',0)]}" />
+                <field name="consume_food" attrs="{'invisible': [('consume_food','=',0)]}" />
+                <field name="consume_wood" attrs="{'invisible': [('consume_wood','=',0)]}" />
+                <field name="consume_stone" attrs="{'invisible': [('consume_stone','=',0)]}" />
+                <field name="consume_iron" attrs="{'invisible': [('consume_iron','=',0)]}" />
+                <field name="train_infantry" attrs="{'invisible': [('train_infantry','=',0)]}" />
+                <field name="train_cavalry" attrs="{'invisible': [('train_cavalry','=',0)]}" />
+                <field name="train_archery" attrs="{'invisible': [('train_archery','=',0)]}" />
+                <field name="train_siege" attrs="{'invisible': [('train_siege','=',0)]}" />
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.building_type_form">
+      <field name="name">Building type list</field>
+      <field name="model">empires_of_legends.building_type</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <group>
+                <field name="name" />
+                <field name="avatar" widget="image" />
+              </group>
+              <group>
+                <field name="produce_food" attrs="{'invisible': [('produce_food','=',0)]}" />
+                <field name="produce_wood" attrs="{'invisible': [('produce_wood','=',0)]}" />
+                <field name="produce_stone" attrs="{'invisible': [('produce_stone','=',0)]}" />
+                <field name="produce_iron" attrs="{'invisible': [('produce_iron','=',0)]}" />
+                <field name="consume_food" attrs="{'invisible': [('consume_food','=',0)]}" />
+                <field name="consume_wood" attrs="{'invisible': [('consume_wood','=',0)]}" />
+                <field name="consume_stone" attrs="{'invisible': [('consume_stone','=',0)]}" />
+                <field name="consume_iron" attrs="{'invisible': [('consume_iron','=',0)]}" />
+                <field name="train_infantry" attrs="{'invisible': [('train_infantry','=',0)]}" />
+                <field name="train_cavalry" attrs="{'invisible': [('train_cavalry','=',0)]}" />
+                <field name="train_archery" attrs="{'invisible': [('train_archery','=',0)]}" />
+                <field name="train_siege" attrs="{'invisible': [('train_siege','=',0)]}" />
+              </group>
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.troop_form">
+      <field name="name">Troops list</field>
+      <field name="model">empires_of_legends.troop</field>
+      <field name="arch" type="xml">
+        <form>
+          <sheet>
+            <group>
+              <field name="name" />
+              <field name="image" />
+              <field name="hp" />
+              <field name="armor" />
+              <field name="damage" />
+              <field name="time" />
+              <field name="speed" />
+            </group>
+          </sheet>
+        </form>
+      </field>
+    </record>
+
+    <!-- vistes kanban -->
+    <record model="ir.ui.view" id="empires_of_legends.player_kanban">
+      <field name="name">Player list kanban</field>
+      <field name="model">res.partner</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="name" />
+          <field name="id" />
+          <field name="password" />
+          <field name="avatar" />
+          <field name="villages" />
+
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
+                <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block"
+                  t-attf-style="background-image:url('#{kanban_image('res.partner',
+                     'image_1920', record.id.value, placeholder)}')"></div>
+
+                <div class="oe_kanban_details d-flex flex-column">
+                  <a type="open">
+                    <h4 class="o_kanban_record_title oe_partner_heading">
+                      <field name="name" />
+                    </h4>
+                  </a>
+                  <ul>
+                    <li>
+                      name:
+                      <field name="name" />
+                    </li>
+                    <li>
+                      password:
+                      <field name="password" />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.building_kanban">
+      <field name="name">Building list kanban</field>
+      <field name="model">empires_of_legends.building</field>
+      <field name="arch" type="xml">
+        <kanban>
+          <field name="name" />
+          <field name="id" />
+          <field name="avatar" />
+          <field name="produce_food" />
+          <field name="produce_wood" />
+          <field name="produce_stone" />
+          <field name="produce_iron" />
+          <field name="consume_food" />
+          <field name="consume_wood" />
+          <field name="consume_stone" />
+          <field name="consume_iron" />
+          <field name="train_infantry" />
+          <field name="train_cavalry" />
+          <field name="train_archery" />
+          <field name="train_siege" />
+
+          <templates>
+            <t t-name="kanban-box">
+              <div t-attf-class="oe_kanban_card o_kanban_record_has_image_fill ">
+                <div class="o_kanban_image_fill_left o_kanban_image_full d-none d-md-block"
+                  t-attf-style="background-image:url('#{kanban_image('empires_of_legends.building',
+                     'avatar', record.id.value, placeholder)}')"></div>
+
+                <div class="oe_kanban_details d-flex flex-column">
+                  <a type="open">
+                    <h4 class="o_kanban_record_title oe_partner_heading">
+                      <field name="name" />
+                    </h4>
+                  </a>
+                  <ul>
+                    <li attrs="{'invisible': [('produce_food','=',0)]}">
+                      produce_food:
+                      <field name="produce_food" />
+                    </li>
+                    <li attrs="{'invisible': [('produce_wood','=',0)]}">
+                      produce_wood:
+                      <field name="produce_wood" />
+                    </li>
+                    <li attrs="{'invisible': [('produce_stone','=',0)]}">
+                      produce_stone:
+                      <field name="produce_stone" />
+                    </li>
+                    <li attrs="{'invisible': [('produce_iron','=',0)]}">
+                      produce_iron:
+                      <field name="produce_iron" />
+                    </li>
+                    <li attrs="{'invisible': [('consume_food','=',0)]}">
+                      consume_food:
+                      <field name="consume_food" />
+                    </li>
+                    <li attrs="{'invisible': [('consume_wood','=',0)]}">
+                      consume_wood:
+                      <field name="consume_wood" />
+                    </li>
+                    <li attrs="{'invisible': [('consume_stone','=',0)]}">
+                      consume_stone:
+                      <field name="consume_stone" />
+                    </li>
+                    <li attrs="{'invisible': [('consume_iron','=',0)]}">
+                      consume_iron:
+                      <field name="consume_iron" />
+                    </li>
+                    <li attrs="{'invisible': [('train_infantry','=',0)]}">
+                      train_infantry:
+                      <field name="train_infantry" />
+                    </li>
+                    <li attrs="{'invisible': [('train_cavalry','=',0)]}">
+                      train_cavalry:
+                      <field name="train_cavalry" />
+                    </li>
+                    <li attrs="{'invisible': [('train_archery','=',0)]}">
+                      train_archery:
+                      <field name="train_archery" />
+                    </li>
+                    <li attrs="{'invisible': [('train_siege','=',0)]}">
+                      train_siege:
+                      <field name="train_siege" />
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </t>
+          </templates>
+        </kanban>
+      </field>
+    </record>
+
+    <!-- vistes search -->
+
+    <record model="ir.ui.view" id="empires_of_legends.player_search">
+      <field name="name">Empires Of Legends player search</field>
+      <field name="model">res.partner</field>
+      <field name="priority" eval="17"/>
+      <field name="arch" type="xml">
+        <search>
+          <filter name="player_partner" string="Is Player" domain="[('is_player','=',True)]" />
+          <field name="name" />
+          <field name="villages" />
+        </search>
+      </field>
+    </record>
+
+    <record model="ir.ui.view" id="empires_of_legends.village_search">
+      <field name="name">Empires Of Legends villages search</field>
+      <field name="model">empires_of_legends.village</field>
+      <field name="arch" type="xml">
+        <search>
+          <field name="name" />
+          <field name="food" />
+          <field name="wood" />
+          <field name="stone" />
+          <field name="iron" />
+          <field name="gold" />
+          <field name="troops_qty" />
+          <field name="territory" />
+          <filter name="group_by_territory" string="Group by territory" context="{'group_by': 'territory'}"></filter>
+        </search>
+      </field>
+    </record>
+
+    <!-- actions opening views on models -->
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_player_window">
+      <field name="name">Empires Of Legends players window</field>
+      <field name="res_model">res.partner</field>
+      <field name="view_mode">kanban,tree,form</field>
+      <field name="domain"></field>
+      <field name="search_view_id" ref="empires_of_legends.player_search"></field>
+      <field name="context">{'default_is_player': True, 'search_default_player_partner': 1}</field>
+      <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('empires_of_legends.player_tree')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('empires_of_legends.player_form')}),]" />
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_territory_window">
+      <field name="name">Empires Of Legends territories window</field>
+      <field name="res_model">empires_of_legends.territory</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_village_window">
+      <field name="name">Empires Of Legends villages window</field>
+      <field name="res_model">empires_of_legends.village</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_building_window">
+      <field name="name">Empires Of Legends buildings window</field>
+      <field name="res_model">empires_of_legends.building</field>
+      <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_building_type_window">
+      <field name="name">Empires Of Legends building types window</field>
+      <field name="res_model">empires_of_legends.building_type</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_troop_window">
+      <field name="name">Empires Of Legends troop window</field>
+      <field name="res_model">empires_of_legends.troop</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+    
+    <record id="empires_of_legends.player_wizard_action" model="ir.actions.act_window">
+      <field name="name">Create Player</field>
+      <field name="res_model">empires_of_legends.player_wizard</field>
+      <field name="view_mode">form</field>
+      <field name="target">new</field>
+      <field name="binding_model_id" ref="base.model_res_partner"/>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_battle_window">
+      <field name="name">empires_of_legends Battles</field>
+      <field name="res_model">empires_of_legends.battle</field>
+      <field name="view_mode">tree,form,calendar</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_village_troop_rel">
+      <field name="name">empires_of_legends village rel</field>
+      <field name="res_model">empires_of_legends.village_troop_rel</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="empires_of_legends.action_village_troop_train_rel">
+      <field name="name">empires_of_legends village rel train</field>
+      <field name="res_model">empires_of_legends.village_troop_train</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+
+    <!-- server action to the one above -->
+    <!--
+    <record model="ir.actions.server" id="empires_of_legends.action_server">
+      <field name="name">empiresOfLegends server</field>
+      <field name="model_id" ref="model_empires_of_legends_empires_of_legends"/>
+      <field name="state">code</field>
+      <field name="code">
+        action = {
+          "type": "ir.actions.act_window",
+          "view_mode": "tree,form",
+          "res_model": model._name,
+        }
+      </field>
+    </record>
+-->
+
+    <!-- Top menu item -->
+
+    <menuitem name="Empires Of Legends" id="empires_of_legends.menu_root" />
+
+    <!-- menu categories -->
+
+    <menuitem name="Game" id="empires_of_legends.game" parent="empires_of_legends.menu_root" />
+
+    <!-- actions -->
+
+    <menuitem name="Players" id="empires_of_legends.player_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_player_window" />
+
+    <menuitem name="Territories" id="empires_of_legends.territory_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_territory_window" />
+
+    <menuitem name="Villages" id="empires_of_legends.village_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_village_window" />
+
+    <menuitem name="Buildings" id="empires_of_legends.building_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_building_window" />
+
+    <menuitem name="Building Types" id="empires_of_legends.building_type_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_building_type_window" />
+
+    <menuitem name="Troops" id="empires_of_legends.troop_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_troop_window" />
+
+    <menuitem name="Battles" id="empires_of_legends.menu_battle_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_battle_window"/>
+
+    <menuitem name="village troop Rels" id="empires_of_legends.menu_c_s_rel_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_village_troop_rel"/>
+
+    <menuitem name="village troop train" id="empires_of_legends.menu_c_s_f_rel_list" parent="empires_of_legends.game"
+      action="empires_of_legends.action_village_troop_train_rel"/>
+  </data>
+</odoo>
